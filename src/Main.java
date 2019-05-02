@@ -12,6 +12,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -28,19 +31,24 @@ public class Main extends Application {
     
     @Override
     public void start(Stage primaryStage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BaseDatosDiseno.fxml"));
     
-    Parent root = fxmlLoader.load();
+        
+    StackPane rootMain = new StackPane();
+    
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BaseDatosDiseno.fxml"));
+    Pane rootBaseDatosDiseno = fxmlLoader.load();
+    rootMain.getChildren().add(rootBaseDatosDiseno);
+    
     emf = Persistence.createEntityManagerFactory("BaseDeDatosPU");
     em = emf.createEntityManager();
-    
+
     BaseDatosDisenoController baseDatosDisenoController = (BaseDatosDisenoController) fxmlLoader.getController();                
     baseDatosDisenoController.setEntityManager(em);
     baseDatosDisenoController.cargarTodosLosUsuarios();
     
-    Scene scene = new Scene(root, 512, 374);
-
+    Scene scene = new Scene(rootMain, 512, 374);
     primaryStage.setTitle("Base Datos");
+    primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("Database.png")));
     primaryStage.setResizable(true);
     primaryStage.setFullScreenExitHint("");
     primaryStage.setScene(scene);

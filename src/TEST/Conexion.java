@@ -13,6 +13,6 @@ public class Conexion {
     
     public static void main(String[] args) {
         Operaciones operaciones = new Operaciones();
-        operaciones.eliminaRegistros();
+        operaciones.conexionBaseDatos();
     }
 }
