@@ -53,8 +53,9 @@ public class Main extends Application {
     primaryStage.setFullScreenExitHint("");
     primaryStage.setScene(scene);
     primaryStage.show();
-
+    
 }
+
 
     @Override
     public void stop() throws Exception {
