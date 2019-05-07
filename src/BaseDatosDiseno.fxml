@@ -20,14 +20,14 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="Archivo">
                         <items>
-                          <MenuItem fx:id="cerraraAplicacion" mnemonicParsing="false" text="Cerrar" />
+                          <MenuItem fx:id="cerraraAplicacion" mnemonicParsing="false" onAction="#onActionCerrar" text="Cerrar" />
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Editar">
                         <items>
-                          <MenuItem fx:id="addRegistro" mnemonicParsing="false" text="Añadir registro" />
-                              <MenuItem fx:id="modifyRegistro" mnemonicParsing="false" text="Modificar registro" />
-                              <MenuItem fx:id="borrarRegistro" mnemonicParsing="false" text="Borrar registro" />
+                          <MenuItem fx:id="addRegistro" mnemonicParsing="false" onAction="#onActionAdd" text="Añadir registro" />
+                              <MenuItem fx:id="modifyRegistro" mnemonicParsing="false" onAction="#onActionModificar" text="Modificar registro" />
+                              <MenuItem fx:id="borrarRegistro" mnemonicParsing="false" onAction="#onActionBorrar" text="Borrar registro" />
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Ayuda">

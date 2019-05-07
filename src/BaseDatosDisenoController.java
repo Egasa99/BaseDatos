@@ -5,14 +5,20 @@
  */
 
 import basededatos.Usuario;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -23,6 +29,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -132,5 +140,55 @@ public class BaseDatosDisenoController implements Initializable {
     List<Usuario> listUsuario = queryUsuarioFindAll.getResultList();
     tabla.setItems(FXCollections.observableArrayList(listUsuario));
     }
-    
+
+    @FXML
+    private void onActionCerrar(ActionEvent event) {
+        System.out.println("Cerrar");
+    }
+
+    @FXML
+    private void onActionAdd(ActionEvent event) {
+        System.out.println("Añadir");
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BaseDatosDetalle.fxml"));
+            Parent rootBaseDatosDetalle = fxmlLoader.load();
+            
+            rootBaseDatosDiseno.setVisible(false);
+            
+            StackPane rootMain = (StackPane)rootBaseDatosDiseno.getScene().getRoot();
+            rootMain.getChildren().add(rootBaseDatosDetalle);
+            
+            BaseDatosDisenoDetalleController baseDatosDisenoDetalleController = (BaseDatosDisenoDetalleController) fxmlLoader.getController();  
+            baseDatosDisenoDetalleController.setRootBaseDatosDiseno(rootBaseDatosDiseno);
+
+        }
+        catch (IOException ex){
+            Logger.getLogger(BaseDatosDisenoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void onActionModificar(ActionEvent event) {
+        System.out.println("Modificar");
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BaseDatosDetalle.fxml"));
+            Parent rootBaseDatosDetalle = fxmlLoader.load();
+            
+            rootBaseDatosDiseno.setVisible(false);
+            
+            StackPane rootMain = (StackPane)rootBaseDatosDiseno.getScene().getRoot();
+            rootMain.getChildren().add(rootBaseDatosDetalle);
+            
+            BaseDatosDisenoDetalleController baseDatosDisenoDetalleController = (BaseDatosDisenoDetalleController) fxmlLoader.getController();  
+            baseDatosDisenoDetalleController.setRootBaseDatosDiseno(rootBaseDatosDiseno);
+        }
+        catch (IOException ex){
+            Logger.getLogger(BaseDatosDisenoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void onActionBorrar(ActionEvent event) {
+        System.out.println("Borrar");
+    }
 }
