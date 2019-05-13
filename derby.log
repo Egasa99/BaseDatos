@@ -1,8 +1,8 @@
 ----------------------------------------------------------------
-Tue May 07 10:20:57 CEST 2019:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-016a-9161-a775-0000029a3018 
+Mon May 13 13:09:27 CEST 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-016a-b0e2-1424-000002b6fe48 
 on database directory C:\Users\PC06\Documents\NetBeansProjects\BaseDeDatos\Database with class loader sun.misc.Launcher$AppClassLoader@55f96302 
-Loaded from file:/C:/Users/PC06/Documents/NetBeansProjects/BaseDeDatos/dist/run837516716/lib/derby.jar
+Loaded from file:/C:/Users/PC06/Documents/NetBeansProjects/BaseDeDatos/dist/run18874000/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_191-b12
 user.dir=C:\Users\PC06\Documents\NetBeansProjects\BaseDeDatos
@@ -12,5 +12,5 @@ os.version=10.0
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-Tue May 07 10:23:32 CEST 2019:
-Shutting down instance a816c00e-016a-9161-a775-0000029a3018 on database directory C:\Users\PC06\Documents\NetBeansProjects\BaseDeDatos\Database with class loader sun.misc.Launcher$AppClassLoader@55f96302 
+Mon May 13 13:14:23 CEST 2019:
+Shutting down instance a816c00e-016a-b0e2-1424-000002b6fe48 on database directory C:\Users\PC06\Documents\NetBeansProjects\BaseDeDatos\Database with class loader sun.misc.Launcher$AppClassLoader@55f96302 

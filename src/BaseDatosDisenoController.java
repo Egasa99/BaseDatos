@@ -8,6 +8,7 @@ import basededatos.Usuario;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +20,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -119,7 +123,10 @@ public class BaseDatosDisenoController implements Initializable {
         columna7.setCellValueFactory(new PropertyValueFactory<>("Estado civil"));
         columna8.setCellValueFactory(new PropertyValueFactory<>("Grupo sanguineo"));
         
-        
+        tabla.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldValue, newValue) -> {
+            usuarioSeleccionado = newValue;
+        });
         tabla.setOnMouseClicked(new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -148,6 +155,7 @@ public class BaseDatosDisenoController implements Initializable {
 
     @FXML
     private void onActionAdd(ActionEvent event) {
+        
         System.out.println("Añadir");
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BaseDatosDetalle.fxml"));
@@ -158,8 +166,13 @@ public class BaseDatosDisenoController implements Initializable {
             StackPane rootMain = (StackPane)rootBaseDatosDiseno.getScene().getRoot();
             rootMain.getChildren().add(rootBaseDatosDetalle);
             
-            BaseDatosDisenoDetalleController baseDatosDisenoDetalleController = (BaseDatosDisenoDetalleController) fxmlLoader.getController();  
+            BaseDatosDisenoDetalleController baseDatosDisenoDetalleController = (BaseDatosDisenoDetalleController) fxmlLoader.getController(); 
             baseDatosDisenoDetalleController.setRootBaseDatosDiseno(rootBaseDatosDiseno);
+            baseDatosDisenoDetalleController.setTablaAnterior(tabla);
+            usuarioSeleccionado = new Usuario();
+            baseDatosDisenoDetalleController.setUsuario(entityManager, usuarioSeleccionado, true);
+            baseDatosDisenoDetalleController.mostrarDatos();
+            
 
         }
         catch (IOException ex){
@@ -181,6 +194,10 @@ public class BaseDatosDisenoController implements Initializable {
             
             BaseDatosDisenoDetalleController baseDatosDisenoDetalleController = (BaseDatosDisenoDetalleController) fxmlLoader.getController();  
             baseDatosDisenoDetalleController.setRootBaseDatosDiseno(rootBaseDatosDiseno);
+            baseDatosDisenoDetalleController.setTablaAnterior(tabla);
+            baseDatosDisenoDetalleController.setUsuario(entityManager, usuarioSeleccionado, false);
+            baseDatosDisenoDetalleController.mostrarDatos();
+
         }
         catch (IOException ex){
             Logger.getLogger(BaseDatosDisenoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -190,5 +207,28 @@ public class BaseDatosDisenoController implements Initializable {
     @FXML
     private void onActionBorrar(ActionEvent event) {
         System.out.println("Borrar");
+        
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar");
+        alert.setHeaderText("¿Desea suprimir el siguiente registro?");
+        alert.setContentText("Una vez aceptado no habrá vuelta atrás");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            entityManager.getTransaction().begin();
+            entityManager.merge(usuarioSeleccionado);
+            entityManager.remove(usuarioSeleccionado);
+            entityManager.getTransaction().commit();
+
+            tabla.getItems().remove(usuarioSeleccionado);
+
+            tabla.getFocusModel().focus(null);
+            tabla.requestFocus();
+        } else {
+            int numFilaSeleccionada = tabla.getSelectionModel().getSelectedIndex();
+            tabla.getItems().set(numFilaSeleccionada, usuarioSeleccionado);
+            TablePosition pos = new TablePosition(tabla, numFilaSeleccionada, null);
+            tabla.getFocusModel().focus(pos);
+            tabla.requestFocus();   
+        }
     }
 }

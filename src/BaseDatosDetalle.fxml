@@ -54,9 +54,9 @@
                </GridPane.margin>
             </HBox>
             <Label text="Grupo Sanguíneo:" GridPane.rowIndex="6" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ComboBox fx:id="ComboBoxGrupoSanguineo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label text="Trabajo:" GridPane.rowIndex="7" />
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <ComboBox fx:id="comboBoxTrabajo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label text="Foto:" GridPane.rowIndex="8" />
             <HBox prefHeight="211.0" prefWidth="39.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
                <children>
