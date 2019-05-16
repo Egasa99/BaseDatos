@@ -188,5 +188,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "basededatos.Usuario[ idUsuario=" + idUsuario + " ]";
     }
-   
+    
 }

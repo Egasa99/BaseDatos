@@ -7,6 +7,10 @@
 import basededatos.Usuario;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -30,10 +34,7 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -81,6 +82,8 @@ public class BaseDatosDisenoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        modifyRegistro.setDisable(true);
+        borrarRegistro.setDisable(true);
         tabla.setEditable(true);
         columna1.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         columna1.setCellFactory(TextFieldTableCell.<Usuario> forTableColumn());
@@ -90,7 +93,7 @@ public class BaseDatosDisenoController implements Initializable {
             String nombre = event.getNewValue();
             int row = pos.getRow();
             Usuario usuario = event.getTableView().getItems().get(row);
- 
+            
             usuario.setNombre(nombre);
             entityManager.getTransaction().begin();
             entityManager.getTransaction().commit();
@@ -119,24 +122,28 @@ public class BaseDatosDisenoController implements Initializable {
         });	
         columna4.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         columna5.setCellValueFactory(new PropertyValueFactory<>("email"));
-        columna6.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
-        columna7.setCellValueFactory(new PropertyValueFactory<>("Estado civil"));
-        columna8.setCellValueFactory(new PropertyValueFactory<>("Grupo sanguineo"));
+        
+        columna6.setCellValueFactory(
+        cellData -> {
+                SimpleStringProperty property = new SimpleStringProperty();
+                if (cellData.getValue().getFechanacimiento() != null) {
+                    Date fecha = cellData.getValue().getFechanacimiento();
+                    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");  
+                    String strDate = dateFormat.format(fecha);  
+                    property.setValue(strDate);
+                }
+                return property;
+        });
+        
+        columna7.setCellValueFactory(new PropertyValueFactory<>("estadocivil"));
+        columna8.setCellValueFactory(new PropertyValueFactory<>("gruposanguineo"));
         
         tabla.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             usuarioSeleccionado = newValue;
+            modifyRegistro.setDisable(false);
+            borrarRegistro.setDisable(false);
         });
-        tabla.setOnMouseClicked(new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                if(mouseEvent.getClickCount() == 2){
-                    System.out.println("Doble click");
-                }
-            }
-        }
-    });
     }
     
     public void setEntityManager(EntityManager entityManager) {

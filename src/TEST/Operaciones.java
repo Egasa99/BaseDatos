@@ -75,7 +75,7 @@ public class Operaciones {
         em.close(); 
         emf.close(); 
         try { 
-            DriverManager.getConnection("jdbc:derby:BDAgendaContactos;shutdown=true"); 
+            DriverManager.getConnection("jdbc:derby:Database;shutdown=true"); 
         } catch (SQLException ex) { 
         }
     }

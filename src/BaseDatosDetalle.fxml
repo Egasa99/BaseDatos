@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -38,7 +39,7 @@
             <Label text="Apellidos:" GridPane.rowIndex="1" />
             <TextField fx:id="apellidoDetalle" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Telefono:" GridPane.rowIndex="2" />
-            <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="emailDetalle" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="Email" GridPane.rowIndex="3" />
             <TextField fx:id="telefonodetalle" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="Fecha Nacimiento:" GridPane.rowIndex="4" />
@@ -46,22 +47,25 @@
             <Label text="Estado Civil:" GridPane.rowIndex="5" />
             <HBox prefWidth="122.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <children>
-                  <RadioButton mnemonicParsing="false" text="Soltero/a" />
-                  <RadioButton mnemonicParsing="false" text="Casado" />
+                  <RadioButton fx:id="botonSoltero" mnemonicParsing="false" text="Soltero/a">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="Civil" />
+                     </toggleGroup></RadioButton>
+                  <RadioButton fx:id="botonCasado" mnemonicParsing="false" text="Casado" toggleGroup="$Civil" />
                </children>
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </HBox>
             <Label text="Grupo Sanguíneo:" GridPane.rowIndex="6" />
-            <ComboBox fx:id="ComboBoxGrupoSanguineo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ComboBox fx:id="comboBoxGrupoSanguineo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label text="Trabajo:" GridPane.rowIndex="7" />
             <ComboBox fx:id="comboBoxTrabajo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label text="Foto:" GridPane.rowIndex="8" />
             <HBox prefHeight="211.0" prefWidth="39.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
                <children>
-                  <ImageView fitHeight="25.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button fx:id="examinarDetalle" mnemonicParsing="false" text="Examinar" />
+                  <ImageView fx:id="fotoView" fitHeight="25.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button fx:id="examinarDetalle" mnemonicParsing="false" onAction="#onActionExaminar" text="Examinar" />
                </children>
             </HBox>
          </children>
