@@ -87,7 +87,6 @@ public class BaseDatosDisenoController implements Initializable {
         tabla.setEditable(true);
         columna1.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         columna1.setCellFactory(TextFieldTableCell.<Usuario> forTableColumn());
-        columna1.setMinWidth(20);
         columna1.setOnEditCommit((CellEditEvent<Usuario,String>event)->{
             TablePosition<Usuario, String> pos = event.getTablePosition();
             String nombre = event.getNewValue();
@@ -96,11 +95,11 @@ public class BaseDatosDisenoController implements Initializable {
             
             usuario.setNombre(nombre);
             entityManager.getTransaction().begin();
+            entityManager.merge(usuario);
             entityManager.getTransaction().commit();
         });
         columna2.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
         columna2.setCellFactory(TextFieldTableCell.<Usuario> forTableColumn());
-        columna2.setMinWidth(20);
         columna2.setOnEditCommit((CellEditEvent<Usuario,String>event)->{
             TablePosition<Usuario, String> pos = event.getTablePosition();
             String apellidos = event.getNewValue();
@@ -109,9 +108,11 @@ public class BaseDatosDisenoController implements Initializable {
  
             usuario.setApellidos(apellidos);
             entityManager.getTransaction().begin();
+            entityManager.merge(usuario);
             entityManager.getTransaction().commit();
         });
-        // Trabajo
+        
+        // Da formato a Trabajo
         columna3.setCellValueFactory(
         cellData -> {
                 SimpleStringProperty property = new SimpleStringProperty();
@@ -123,6 +124,7 @@ public class BaseDatosDisenoController implements Initializable {
         columna4.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         columna5.setCellValueFactory(new PropertyValueFactory<>("email"));
         
+        //Da formato a la fecha
         columna6.setCellValueFactory(
         cellData -> {
                 SimpleStringProperty property = new SimpleStringProperty();
@@ -137,13 +139,15 @@ public class BaseDatosDisenoController implements Initializable {
         
         columna7.setCellValueFactory(new PropertyValueFactory<>("estadocivil"));
         columna8.setCellValueFactory(new PropertyValueFactory<>("gruposanguineo"));
-        
+        //En el momento que se ha seleccionado algún registro, se puede modiicar y borrar
         tabla.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             usuarioSeleccionado = newValue;
             modifyRegistro.setDisable(false);
             borrarRegistro.setDisable(false);
         });
+        
+        
     }
     
     public void setEntityManager(EntityManager entityManager) {

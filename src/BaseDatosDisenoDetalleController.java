@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,6 +38,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -94,7 +97,7 @@ public class BaseDatosDisenoDetalleController implements Initializable {
     private RadioButton botonCasado;
     @FXML
     private ImageView fotoView;
-    
+       
     public void setRootBaseDatosDiseno(Pane rootBaseDatosDiseno) {
     this.rootBaseDatosDiseno = rootBaseDatosDiseno;
 }
@@ -106,10 +109,11 @@ public class BaseDatosDisenoDetalleController implements Initializable {
         // TODO
     }    
 
+    //Guarda el contenido de la anterior tabla
     public void setTablaAnterior(TableView tableViewAnterior){
         this.tableViewAnterior = tableViewAnterior;
     }
-    
+    //Detecta si va a ser un usuario nuevo o uno existente
     public void setUsuario(EntityManager entityManager, Usuario usuario, boolean nuevoUsuario){
         
         this.nuevoUsuario = nuevoUsuario;
@@ -123,13 +127,35 @@ public class BaseDatosDisenoDetalleController implements Initializable {
             this.usuario = usuario;
         }
     }
+ 
+   //Limita caracteres
+    public static void limitTextField(TextField textField, int limit) {
+        UnaryOperator<Change> textLimitFilter = change -> {
+            if (change.isContentChange()) {
+                int newLength = change.getControlNewText().length();
+                if (newLength > limit) {
+                    String trimmedText = change.getControlNewText().substring(0, limit);
+                    change.setText(trimmedText);
+                    int oldLength = change.getControlText().length();
+                    change.setRange(0, oldLength);
+                }
+            }
+            return change;
+        };
+        textField.setTextFormatter(new TextFormatter(textLimitFilter));
+    } 
+    
+    
     
     public void mostrarDatos(){
         emailDetalle.setText(usuario.getEmail());
+        limitTextField(emailDetalle,30);
         nombreDetalle.setText(usuario.getNombre());
+        limitTextField(nombreDetalle,20);
         apellidoDetalle.setText(usuario.getApellidos());
+        limitTextField(apellidoDetalle,20);
         telefonodetalle.setText(usuario.getTelefono());
-        
+        //Opciones de los grupos sanguíneos
         ArrayList<String> listaGrupoSanguineo = new ArrayList();
         listaGrupoSanguineo.add("A+");
         listaGrupoSanguineo.add("A-");
@@ -145,7 +171,7 @@ public class BaseDatosDisenoDetalleController implements Initializable {
             comboBoxGrupoSanguineo.setValue(usuario.getGruposanguineo());
         }
 
-
+        //Convierte el valor de date a datePicker
         if (usuario.getFechanacimiento() != null) {
             Date date = usuario.getFechanacimiento();
             Instant instant = date.toInstant();
@@ -154,7 +180,7 @@ public class BaseDatosDisenoDetalleController implements Initializable {
             fechaDetalle.setValue(localDate);
             
         }
-        
+        // Casos Casado soltero
         if (usuario.getEstadocivil() != null) {
             switch (usuario.getEstadocivil()) {
                 case CASADO:
@@ -165,6 +191,7 @@ public class BaseDatosDisenoDetalleController implements Initializable {
                     break;
         }
         }
+        //Guarda comboBox Trabajo
         Query queryTrabajoFindAll = entityManager.createNamedQuery("Trabajo.findAll");
         List listTrabajo = queryTrabajoFindAll.getResultList();
         comboBoxTrabajo.setItems(FXCollections.observableList(listTrabajo));
@@ -222,26 +249,28 @@ public class BaseDatosDisenoDetalleController implements Initializable {
                 StackPane rootMain = (StackPane)rootBaseDatosDetalle.getScene().getRoot();
                 rootMain.getChildren().remove(rootBaseDatosDetalle);      
                 rootBaseDatosDiseno.setVisible(true);
+                //Guardar los String en la Base de Datos y mostrarlos en Diseño
                 usuario.setNombre(nombreDetalle.getText());
                 usuario.setEmail(emailDetalle.getText());
                 usuario.setApellidos(apellidoDetalle.getText());
                 usuario.setTelefono(telefonodetalle.getText());
-                //
+                
+                //Guardar RadioButton botonCasado
                 if(botonCasado.isSelected()) {
                     usuario.setEstadocivil("Casado");
                 } else if(botonSoltero.isSelected()) {
                     usuario.setEstadocivil("Soltero");
                 }
-
+                //Guarda el valor seleccionado de comboBox Grupo Sanguineo
                 if(comboBoxGrupoSanguineo.getValue() != null) {
                     usuario.setGruposanguineo(comboBoxGrupoSanguineo.getValue());
                 }
-
+                //Guarda el valor seleccionado de comboBox Trabajo
                 if (comboBoxTrabajo.getValue() != null) {
                         usuario.setTrabajo(comboBoxTrabajo.getValue());
                 }
                 System.out.println(nuevoUsuario+" Vista detalle");
-                
+                //Todos los valores son guardardos en la base de datos
                 if(nuevoUsuario) {
                     tableViewAnterior.getItems().add(usuario);
                     numFilaSeleccionada = tableViewAnterior.getItems().size() - 1;
@@ -253,7 +282,7 @@ public class BaseDatosDisenoDetalleController implements Initializable {
                     tableViewAnterior.getItems().set(numFilaSeleccionada, usuario);
                     entityManager.merge(usuario);
                 }
-
+                //Guarda la fecha
                 if(fechaDetalle.getValue() != null) {
                     LocalDate localDate = fechaDetalle.getValue();
                     ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
@@ -269,7 +298,7 @@ public class BaseDatosDisenoDetalleController implements Initializable {
                 tableViewAnterior.getFocusModel().focus(pos);
                 tableViewAnterior.requestFocus();
             }catch (RollbackException ex) { 
-// Los datos introducidos no cumplen los requisitos de la BD
+            // Los datos introducidos no cumplen los requisitos de la BD
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setHeaderText("No se han podido guardar los cambios. "
                     + "Compruebe que los datos cumplen los requisitos");
@@ -295,6 +324,7 @@ public class BaseDatosDisenoDetalleController implements Initializable {
 
     @FXML
     private void onActionExaminar(ActionEvent event) {
+        //Inserta una imagen
         if(fotoView.getImage()== null){  
         File carpetaFotos = new File(CARPETA_FOTOS);
             if(!carpetaFotos.exists()) {
@@ -322,6 +352,7 @@ public class BaseDatosDisenoDetalleController implements Initializable {
                 }
             }
         }
+        //Elimina la imagen si existe
         else{
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("ATENCION");

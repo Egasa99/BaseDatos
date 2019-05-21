@@ -15,12 +15,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="rootBaseDatosDetalle" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BaseDatosDisenoDetalleController">
+<AnchorPane fx:id="rootBaseDatosDetalle" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BaseDatosDisenoDetalleController">
    <children>
-      <GridPane prefHeight="266.0" prefWidth="600.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <GridPane layoutX="15.0" layoutY="15.0" prefHeight="286.0" prefWidth="585.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="10.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="480.0" minWidth="348.0" prefWidth="480.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -62,10 +62,10 @@
             <Label text="Trabajo:" GridPane.rowIndex="7" />
             <ComboBox fx:id="comboBoxTrabajo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
             <Label text="Foto:" GridPane.rowIndex="8" />
-            <HBox prefHeight="211.0" prefWidth="39.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8" GridPane.valignment="TOP">
                <children>
-                  <ImageView fx:id="fotoView" fitHeight="25.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button fx:id="examinarDetalle" mnemonicParsing="false" onAction="#onActionExaminar" text="Examinar" />
+                  <ImageView fx:id="fotoView" fitHeight="79.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button fx:id="examinarDetalle" alignment="CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#onActionExaminar" text="Examinar" />
                </children>
             </HBox>
          </children>
@@ -77,4 +77,7 @@
          </children>
       </HBox>
    </children>
+   <padding>
+      <Insets left="5.0" top="5.0" />
+   </padding>
 </AnchorPane>
